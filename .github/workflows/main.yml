@@ -1,8 +1,22 @@
-name: Emergency Alert(SOS / Acidente)
+name: Emergency Alert (SOS / Acidente)
 
 on:
   repository_dispatch:
     types: [traccar_sos, acidente_detectado]
+  workflow_dispatch:
+    inputs:
+      tipo_alerta:
+        description: 'Tipo de Alerta'
+        required: true
+        default: 'traccar_sos'
+        type: choice
+        options:
+          - traccar_sos
+          - acidente_detectado
+      mensagem:
+        description: 'Mensagem de teste'
+        required: false
+        default: 'Alerta manual de teste'
 
 jobs:
   emergencia:
@@ -10,9 +24,7 @@ jobs:
     steps:
       - name: Processar Alerta
         run: |
-          echo "⚠️ ALERTA RECEBIDO DO TRACKER!"
+          echo "⚠️ ALERTA RECEBIDO!"
           echo "Dados do evento:"
           echo '${{ toJson(github.event.client_payload) }}'
-          
-      # Aqui pode adicionar passos para enviar notificações, por exemplo:
-      # - Enviar mensagem para o Telegram, Discord, ligar luzes inteligentes via API, etc.
+          echo '${{ toJson(github.event.inputs) }}'
