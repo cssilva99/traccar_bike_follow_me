@@ -19,6 +19,9 @@ jobs:
           TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
           TWILIO_TO_NUMBER: ${{ secrets.TWILIO_TO_NUMBER }}
         run: |
+          echo "TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:0:5}..."  # Only show first few chars for safety
+          echo "TWILIO_FROM_NUMBER: $TWILIO_FROM_NUMBER"
+          echo "TWILIO_TO_NUMBER: $TWILIO_TO_NUMBER"
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
             --data-urlencode "TemplateName=sms_welcome" \
             --data-urlencode "From=$TWILIO_FROM_NUMBER" \
