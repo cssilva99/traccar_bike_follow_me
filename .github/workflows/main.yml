@@ -23,7 +23,8 @@ jobs:
           echo "TWILIO_FROM_NUMBER: $TWILIO_FROM_NUMBER"
           echo "TWILIO_TO_NUMBER: $TWILIO_TO_NUMBER"
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
-            --data-urlencode "TemplateName=sms_welcome" \
-            --data-urlencode "From=$TWILIO_FROM_NUMBER" \
-            --data-urlencode "To=$TWILIO_TO_NUMBER" \
-            -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
+           --data-urlencode "From=$TWILIO_FROM_NUMBER" \
+           --data-urlencode "To=$TWILIO_TO_NUMBER" \
+           --data-urlencode "Body=Hello from your Twilio trial account!" \
+           -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
+
