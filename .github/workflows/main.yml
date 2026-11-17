@@ -32,8 +32,7 @@ jobs:
           # Nota: Se estiveres a usar WhatsApp, o número costuma começar por 'whatsapp:'
           TWILIO_PHONE_NUMBER: "+351919347986"
           TARGET_PHONE_NUMBER: "+351919347986"
-          # Substitui pelo teu Content SID real obtido na consola da Twilio (ex: HXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)
-          TWILIO_CONTENT_SID: "HXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          # Substitui pelo teu Content SID real obtido na consola da 
         run: |
           # Determinar a mensagem a enviar (manual ou via evento)
           MENSAGEM="${{ github.event.inputs.mensagem }}"
@@ -45,5 +44,4 @@ jobs:
             --user "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
             --data-urlencode "From=$TWILIO_PHONE_NUMBER" \
             --data-urlencode "To=$TARGET_PHONE_NUMBER" \
-            --data-urlencode "ContentSid=$TWILIO_CONTENT_SID" \
             --data-urlencode "ContentVariables={\"1\":\"$MENSAGEM\"}"
