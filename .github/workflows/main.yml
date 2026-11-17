@@ -1,48 +1,27 @@
-name: Emergency Alert (SOS / Acidente)
+name: Send SMS with Twilio Trial
 
 on:
-  repository_dispatch:
-    types: [traccar_sos, acidente_detectado]
   workflow_dispatch:
     inputs:
-      tipo_alerta:
-        description: 'Tipo de Alerta'
+      message:
+        description: 'SMS message to send'
         required: true
-        default: 'traccar_sos'
-        type: choice
-        options:
-          - traccar_sos
-          - acidente_detectado
-      mensagem:
-        description: 'Mensagem de teste'
-        required: false
-        default: 'Alerta manual de teste'
+        default: 'Hello from GitHub Actions via Twilio Trial!'
 
 jobs:
-  emergencia:
+  send_sms:
     runs-on: ubuntu-latest
     steps:
-      - name: Twilio URL Debug
-        run: echo "Accessing https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json"
-        
-      - name: Send sms message using Twilio Template
+      - name: Send SMS via Twilio
         env:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          # Nota: Se estiveres a usar WhatsApp, o número costuma começar por 'whatsapp:'
-          TWILIO_PHONE_NUMBER: "+351919347986"
-          TARGET_PHONE_NUMBER: "+351919347986"
-          MENSAGEM : "teste"
-          
+          TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+          TWILIO_TO_NUMBER: ${{ secrets.TWILIO_TO_NUMBER }}
+          MESSAGE: ${{ github.event.inputs.message }}
         run: |
-          # Determinar a mensagem a enviar (manual ou via evento)
-          MENSAGEM="${{ github.event.inputs.mensagem }}"
-          if [ -z "$MENSAGEM" ]; then
-            MENSAGEM="Alerta automático do Traccar / Acidente"
-          fi
-
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
-            --user "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
-            --data-urlencode "From=$TWILIO_PHONE_NUMBER" \
-            --data-urlencode "To=$TARGET_PHONE_NUMBER" \
-            --data-urlencode "ContentVariables={\"1\":\"$MENSAGEM\"}"
+          --data-urlencode "Body=$MESSAGE" \
+          --data-urlencode "From=$TWILIO_FROM_NUMBER" \
+          --data-urlencode "To=$TWILIO_TO_NUMBER" \
+          -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
