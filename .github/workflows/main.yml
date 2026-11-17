@@ -24,15 +24,26 @@ jobs:
     steps:
       - name: Twilio URL Debug
         run: echo "Accessing https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json"
-      - name: Send sms message using Twilio
+        
+      - name: Send sms message using Twilio Template
         env:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          # Nota: Se estiveres a usar WhatsApp, o número costuma começar por 'whatsapp:'
           TWILIO_PHONE_NUMBER: "+351919347986"
           TARGET_PHONE_NUMBER: "+351919347986"
+          # Substitui pelo teu Content SID real obtido na consola da Twilio (ex: HXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)
+          TWILIO_CONTENT_SID: "HXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         run: |
+          # Determinar a mensagem a enviar (manual ou via evento)
+          MENSAGEM="${{ github.event.inputs.mensagem }}"
+          if [ -z "$MENSAGEM" ]; then
+            MENSAGEM="Alerta automático do Traccar / Acidente"
+          fi
+
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
             --user "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
             --data-urlencode "From=$TWILIO_PHONE_NUMBER" \
             --data-urlencode "To=$TARGET_PHONE_NUMBER" \
-            --data-urlencode "Body=⚠️ ALERTA RECEBIDO! Alerta manual de teste da GitHub Action."
+            --data-urlencode "ContentSid=$TWILIO_CONTENT_SID" \
+            --data-urlencode "ContentVariables={\"1\":\"$MENSAGEM\"}"
