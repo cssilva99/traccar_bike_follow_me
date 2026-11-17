@@ -27,7 +27,7 @@ jobs:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
           TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
-          TARGET_PHONE_NUMBER: "+351912345678" # Substitua pelo número para onde quer receber o alerta
+          TARGET_PHONE_NUMBER: ${{ secrets.TARGET_PHONE_NUMBER}}
         run: |
           curl -X POST "https://api.twilio.com/2010-04-10/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
             --user "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
