@@ -22,9 +22,15 @@ jobs:
   emergencia:
     runs-on: ubuntu-latest
     steps:
-      - name: Processar Alerta
-        run: |
-          echo "⚠️ ALERTA RECEBIDO!"
-          echo "Dados do evento:"
-          echo '${{ toJson(github.event.client_payload) }}'
-          echo '${{ toJson(github.event.inputs) }}'
+      - name: Enviar SMS via Twilio
+         env:
+           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+           TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+           TARGET_PHONE_NUMBER: "+351912345678" # Substitua pelo número de telemóvel para onde quer receber o alerta (com indicativo)
+         run: |
+           curl -X POST "https://api.twilio.com/2010-04-10/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
+             --user "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
+             --data-urlencode "From=$TWILIO_PHONE_NUMBER" \
+             --data-urlencode "To=$TARGET_PHONE_NUMBER" \
+             --data-urlencode "Body=⚠️ ALERTA RECEBIDO! Alerta manual de teste da GitHub Action."
