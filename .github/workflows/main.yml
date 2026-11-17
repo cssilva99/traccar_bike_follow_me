@@ -32,7 +32,8 @@ jobs:
           # Nota: Se estiveres a usar WhatsApp, o número costuma começar por 'whatsapp:'
           TWILIO_PHONE_NUMBER: "+351919347986"
           TARGET_PHONE_NUMBER: "+351919347986"
-          # Substitui pelo teu Content SID real obtido na consola da 
+          MENSAGEM : "teste"
+          
         run: |
           # Determinar a mensagem a enviar (manual ou via evento)
           MENSAGEM="${{ github.event.inputs.mensagem }}"
