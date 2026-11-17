@@ -7,21 +7,20 @@ on:
         description: 'SMS message to send'
         required: true
         default: 'Hello from GitHub Actions via Twilio Trial!'
+
 jobs:
   send_sms:
     runs-on: ubuntu-latest
     steps:
-      - name: Send SMS via Twilio        
-      env:
-        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-        TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
-        TWILIO_TO_NUMBER: ${{ secrets.TWILIO_TO_NUMBER }}
-      run: |
+      - name: Send SMS via Twilio
+        env:
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_FROM_NUMBER: ${{ secrets.TWILIO_FROM_NUMBER }}
+          TWILIO_TO_NUMBER: ${{ secrets.TWILIO_TO_NUMBER }}
+        run: |
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
             --data-urlencode "TemplateName=sms_welcome" \
             --data-urlencode "From=$TWILIO_FROM_NUMBER" \
             --data-urlencode "To=$TWILIO_TO_NUMBER" \
-       -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
-
-
+            -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
