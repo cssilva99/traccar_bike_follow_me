@@ -22,7 +22,9 @@ jobs:
   emergencia:
     runs-on: ubuntu-latest
     steps:
-      - name: Enviar SMS via Twilio
+      - name: Twilio URL Debug
+        run: echo "Accessing https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json"
+      - name: Send sms message using Twilio
         env:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
