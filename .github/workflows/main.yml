@@ -21,7 +21,8 @@ jobs:
           MESSAGE: ${{ github.event.inputs.message }}
         run: |
           curl -X POST "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json" \
-          --data-urlencode "Body=$MESSAGE" \
-          --data-urlencode "From=$TWILIO_FROM_NUMBER" \
-          --data-urlencode "To=$TWILIO_TO_NUMBER" \
-          -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
+           --data-urlencode "TemplateName=sms_welcome" \
+           --data-urlencode "From=$TWILIO_FROM_NUMBER" \
+           --data-urlencode "To=$TWILIO_TO_NUMBER" \
+           -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN"
+
